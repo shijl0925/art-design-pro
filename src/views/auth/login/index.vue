@@ -149,21 +149,21 @@
     {
       key: 'super',
       label: t('login.roles.super'),
-      userName: 'Super',
+      userName: 'vben',
       password: '123456',
       roles: ['R_SUPER']
     },
     {
       key: 'admin',
       label: t('login.roles.admin'),
-      userName: 'Admin',
+      userName: 'admin',
       password: '123456',
       roles: ['R_ADMIN']
     },
     {
       key: 'user',
       label: t('login.roles.user'),
-      userName: 'User',
+      userName: 'jack',
       password: '123456',
       roles: ['R_USER']
     }
@@ -228,18 +228,18 @@
       // 登录请求
       const { username, password } = formData
 
-      const { token, refreshToken } = await UserService.login({
+      const { accessToken, refreshToken } = await UserService.login({
         userName: username,
         password
       })
 
-      // 验证token
-      if (!token) {
+      // 验证accessToken
+      if (!accessToken) {
         throw new Error('Login failed - no token received')
       }
 
-      // 存储token和用户信息
-      userStore.setToken(token, refreshToken)
+      // 存储accessToken和用户信息
+      userStore.setToken(accessToken, refreshToken)
       const userInfo = await UserService.getUserInfo()
       userStore.setUserInfo(userInfo)
       userStore.setLoginStatus(true)
