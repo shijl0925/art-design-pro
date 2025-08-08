@@ -40,10 +40,11 @@ export enum RoutesAlias {
   ArticleDetail = '/article/detail', // 文章详情
   Comment = '/article/comment', // 评论
   ArticlePublish = '/article/publish', // 文章发布
-  User = '/system/user', // 账户
-  Role = '/system/role', // 角色
+  User = '/system/user2', // 账户
+  Role = '/system/role2', // 角色
   UserCenter = '/system/user-center', // 用户中心
-  Menu = '/system/menu', // 菜单
+  Menu = '/system/menu2', // 菜单
+  Resource = '/system/resource2', // 接口
   NestedMenu1 = '/system/nested/menu1', // 嵌套菜单1
   NestedMenu21 = '/system/nested/menu2', // 嵌套菜单2-1
   NestedMenu31 = '/system/nested/menu3', // 嵌套菜单3-1
