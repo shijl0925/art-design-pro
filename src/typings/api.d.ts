@@ -47,7 +47,7 @@ declare namespace Api {
 
     /** 登录响应 */
     interface LoginResponse {
-      token: string
+      accessToken: string
       refreshToken: string
     }
   }
@@ -63,6 +63,20 @@ declare namespace Api {
       avatar?: string
       email?: string
       phone?: string
+      menus: MenuItem[]
+      permissions: string[]
+    }
+
+    interface MenuItem {
+      name: string
+      path: string
+      component: string
+      meta: {
+        title: string
+        icon?: string
+        order?: number
+      }
+      children: MenuItem[]
     }
 
     /** 用户列表数据 */
