@@ -6,7 +6,7 @@ import { useUserStore } from '@/store/modules/user'
 import { useMenuStore } from '@/store/modules/menu'
 import { setWorktab } from '@/utils/navigation'
 import { setPageTitle, setSystemTheme } from '../utils/utils'
-import { menuService } from '@/api/menuApi'
+// import { menuService } from '@/api/menuApi'
 import { registerDynamicRoutes } from '../utils/registerRoutes'
 import { AppRouteRecord } from '@/types/router'
 import { RoutesAlias } from '../routesAlias'
@@ -237,9 +237,28 @@ async function processFrontendMenu(router: Router): Promise<void> {
 /**
  * 处理后端控制模式的菜单逻辑
  */
-async function processBackendMenu(router: Router): Promise<void> {
-  const { menuList } = await menuService.getMenuList()
-  await registerAndStoreMenu(router, menuList)
+// async function processBackendMenu(router: Router): Promise<void> {
+//   const { menuList } = await menuService.getMenuList()
+//   await registerAndStoreMenu(router, menuList)
+// }
+async function processBackendMenu(router: Router): Promise<() => void> {
+  const closeLoading = loadingService.showLoading()
+  try {
+    // 获取菜单列表
+    const data = await UserService.getUserInfo()
+    // 获取到的菜单数据
+    const menuRes = Array.isArray(data.menus) ? data.menus : []
+
+    const menuList: AppRouteRecord[] = menuRes.map((route: AppRouteRecord) =>
+      menuDataToRouter(route)
+    )
+    await registerAndStoreMenu(router, menuList)
+    return closeLoading
+  } catch (error) {
+    // 确保在发生错误时也能关闭加载状态
+    closeLoading()
+    throw error
+  }
 }
 
 /**
