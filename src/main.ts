@@ -17,6 +17,7 @@ import '@utils/sys/console.ts'                      // 控制台输出内容
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { setupGlobDirectives } from './directives'
 import language from './locales'
+import { registerPermissionDirective } from '@/utils/permission'
 
 document.addEventListener(
   'touchstart',
@@ -28,6 +29,8 @@ const app = createApp(App)
 initStore(app)
 initRouter(app)
 setupGlobDirectives(app)
+// 注册自定义v-permission指令
+registerPermissionDirective(app)
 
 app.use(language)
 
