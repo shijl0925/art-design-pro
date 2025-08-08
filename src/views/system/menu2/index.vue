@@ -34,7 +34,7 @@
       />
 
       <!-- 引用菜单弹窗组件 -->
-      <menu-info ref="menuModalRef" @refresh="refreshMenuList" @success="refreshMenuList" />
+      <menuDialog ref="menuModalRef" @refresh="refreshMenuList" @success="refreshMenuList" />
       <el-dialog
         :title="dialogTitle"
         v-model="dialogVisible"
@@ -65,7 +65,7 @@
   import { getAllMenu, deleteMenu } from '@/api/system/menu'
   import { ApiStatus } from '@/utils/http/status'
   import { useTable } from '@/composables/useTable'
-  import menuInfo from './modal/menuInfo.vue'
+  import menuDialog from './modal/menu-dialog.vue'
   import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
   import { formatMenuTitle } from '@/router/utils/utils'
   import { format_datetime } from '@/utils/date'
