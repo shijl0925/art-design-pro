@@ -1,6 +1,7 @@
 import { RoutesAlias } from '../routesAlias'
 import { AppRouteRecord } from '@/types/router'
 import { WEB_LINKS } from '@/utils/constants'
+import { MENU, ROLE, USER, RESOURCE } from '@/utils/perms'
 
 /**
  * 菜单列表、异步路由
@@ -339,7 +340,8 @@ export const asyncRoutes: AppRouteRecord[] = [
         meta: {
           title: 'menus.system.user',
           keepAlive: true,
-          roles: ['R_SUPER', 'R_ADMIN']
+          // roles: ['R_SUPER', 'R_ADMIN'],
+          permission: USER.READ
         }
       },
       {
@@ -349,7 +351,8 @@ export const asyncRoutes: AppRouteRecord[] = [
         meta: {
           title: 'menus.system.role',
           keepAlive: true,
-          roles: ['R_SUPER']
+          // roles: ['R_SUPER'],
+          permission: ROLE.READ
         }
       },
       {
@@ -370,21 +373,32 @@ export const asyncRoutes: AppRouteRecord[] = [
         meta: {
           title: 'menus.system.menu',
           keepAlive: true,
-          roles: ['R_SUPER'],
-          authList: [
-            {
-              title: '新增',
-              authMark: 'add'
-            },
-            {
-              title: '编辑',
-              authMark: 'edit'
-            },
-            {
-              title: '删除',
-              authMark: 'delete'
-            }
-          ]
+          // roles: ['R_SUPER'],
+          // authList: [
+          //   {
+          //     title: '新增',
+          //     authMark: 'add'
+          //   },
+          //   {
+          //     title: '编辑',
+          //     authMark: 'edit'
+          //   },
+          //   {
+          //     title: '删除',
+          //     authMark: 'delete'
+          //   }
+          // ]
+          permission: MENU.READ
+        }
+      },
+      {
+        path: 'resource',
+        name: 'Resource',
+        component: RoutesAlias.Resource,
+        meta: {
+          title: 'menus.system.resource',
+          keepAlive: true,
+          permission: RESOURCE.READ
         }
       },
       {
