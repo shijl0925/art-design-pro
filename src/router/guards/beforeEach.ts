@@ -16,6 +16,8 @@ import { loadingService } from '@/utils/ui'
 import { useCommon } from '@/composables/useCommon'
 import { useWorktabStore } from '@/store/modules/worktab'
 import { UserService } from '@/api/usersApi'
+import { hasPermission } from '@/utils/permission'
+import { usePermissionStore } from '@/store/modules/permission'
 
 // 前端权限模式 loading 关闭延时，提升用户体验
 const LOADING_DELAY = 100
@@ -81,6 +83,11 @@ async function handleRouteGuard(
 ): Promise<void> {
   const settingStore = useSettingStore()
   const userStore = useUserStore()
+
+  if (to.meta?.permission && !hasPermission(to.meta.permission as string)) {
+    next(RoutesAlias.Exception403)
+    return
+  }
 
   // 处理进度条
   if (settingStore.showNprogress) {
@@ -156,11 +163,17 @@ async function handleDynamicRoutes(
 
     // 获取用户信息
     const userStore = useUserStore()
+    const permissionStore = usePermissionStore()
     const isRefresh = from.path === '/'
     if (isRefresh || !userStore.info || Object.keys(userStore.info).length === 0) {
       try {
         const data = await UserService.getUserInfo()
         userStore.setUserInfo(data)
+
+        // 设置权限
+        if (data && Array.isArray(data.permissions)) {
+          permissionStore.setPermissions(data.permissions)
+        }
       } catch (error) {
         console.error('获取用户信息失败', error)
       }
