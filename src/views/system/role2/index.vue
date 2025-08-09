@@ -75,7 +75,7 @@
       <ElScrollbar height="70vh">
         <ElTree
           ref="treeRef"
-          :data="processedMenuList"
+          :data="menuList"
           show-checkbox
           node-key="id"
           :default-expand-all="isExpandAll"
@@ -137,22 +137,6 @@
   const currentRolePermissions = ref<number[]>([])
   // 添加当前角色ID
   const currentRoleId = ref<string | null>(null)
-
-  // 处理菜单数据，将 authList 转换为子节点
-  const processedMenuList = computed(() => {
-    const processNode = (node: any) => {
-      const processed = { ...node }
-
-      // 递归处理子节点
-      if (processed.children) {
-        processed.children = processed.children.map(processNode)
-      }
-
-      return processed
-    }
-
-    return menuList.value.map(processNode)
-  })
 
   // 获取菜单列表数据
   const loadMenuList = async () => {
@@ -374,7 +358,7 @@
       })
     }
 
-    findMatchingNodes(processedMenuList.value)
+    findMatchingNodes(menuList.value)
 
     // 设置选中的键
     tree.setCheckedKeys(keysToCheck)
@@ -389,7 +373,7 @@
     if (!tree) return
 
     const checkedKeys = tree.getCheckedKeys()
-    const allKeys = getAllNodeKeys(processedMenuList.value)
+    const allKeys = getAllNodeKeys(menuList.value)
 
     // 判断是否全选
     isSelectAll.value = checkedKeys.length === allKeys.length && allKeys.length > 0
@@ -563,7 +547,7 @@
 
     if (!isSelectAll.value) {
       // 全选：获取所有节点的key并设置为选中
-      const allKeys = getAllNodeKeys(processedMenuList.value)
+      const allKeys = getAllNodeKeys(menuList.value)
       tree.setCheckedKeys(allKeys)
     } else {
       // 取消全选：清空所有选中
