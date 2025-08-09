@@ -175,6 +175,7 @@
   const dragVerify = ref()
 
   const userStore = useUserStore()
+  const permissionStore = usePermissionStore()
   const router = useRouter()
   const isPassing = ref(false)
   const isClickPass = ref(false)
@@ -244,6 +245,11 @@
       userStore.setUserInfo(userInfo)
       userStore.setLoginStatus(true)
 
+      // 设置权限
+      if (userInfo && Array.isArray(userInfo.permissions)) {
+        permissionStore.setPermissions(userInfo.permissions)
+      }
+
       // 登录成功处理
       showLoginSuccessNotice()
       router.push('/')
@@ -292,6 +298,7 @@
   // 切换主题
   import { useTheme } from '@/composables/useTheme'
   import { UserService } from '@/api/usersApi'
+  import { usePermissionStore } from '@/store/modules/permission'
 
   const toggleTheme = () => {
     let { LIGHT, DARK } = SystemThemeEnum
