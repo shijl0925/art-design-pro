@@ -86,10 +86,7 @@
         >
           <template #default="{ data }">
             <div style="display: flex; align-items: center">
-              <span v-if="data.isAuth">
-                {{ data.label }}
-              </span>
-              <span v-else>{{ defaultProps.label(data) }}</span>
+              <span>{{ defaultProps.label(data) }}</span>
             </div>
           </template>
         </ElTree>
