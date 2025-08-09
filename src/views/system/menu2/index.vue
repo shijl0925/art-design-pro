@@ -2,11 +2,7 @@
   <div v-bind="attrs">
     <div class="page-content" id="table-full-screen">
       <!-- 表格头部 -->
-      <ArtTableHeader
-        :columnList="columnOptions"
-        v-model:columns="columnChecks"
-        @refresh="handleRefresh"
-      >
+      <ArtTableHeader v-model:columns="columnChecks" @refresh="handleRefresh">
         <template #left>
           <ElButton
             @click="showMenuModal('add-menu-level1', null, true)"
@@ -34,33 +30,13 @@
       />
 
       <!-- 引用菜单弹窗组件 -->
-      <menuDialog ref="menuModalRef" @refresh="refreshMenuList" @success="refreshMenuList" />
-      <el-dialog
-        :title="dialogTitle"
-        v-model="dialogVisible"
-        width="700px"
-        align-center
-        :close-on-click-modal="false"
-      >
-        <!-- 内容不变... -->
-      </el-dialog>
-
-      <!-- 添加/编辑权限的弹窗 -->
-      <el-dialog
-        :title="isEditingAuth ? '编辑权限' : '添加权限'"
-        v-model="authFormVisible"
-        width="500px"
-        append-to-body
-        :close-on-click-modal="false"
-      >
-        <!-- 内容不变... -->
-      </el-dialog>
+      <menuDialog ref="menuModalRef" @refresh="handleRefresh" @success="handleRefresh" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref, computed, h, useAttrs } from 'vue'
+  import { onMounted, ref, h, useAttrs } from 'vue'
   import { ElTag, ElMessage, ElMessageBox } from 'element-plus'
   import { getAllMenu, deleteMenu } from '@/api/system/menu'
   import { ApiStatus } from '@/utils/http/status'
@@ -211,20 +187,6 @@
         }
       ]
     },
-    transform: {
-      responseAdapter: (response) => {
-        if (response.code === ApiStatus.success) {
-          return {
-            data: response.data || [],
-            total: response.data?.length || 0,
-            current: 1,
-            size: response.data?.length || 0
-          }
-        } else {
-          throw new Error(response.message || '获取菜单列表失败')
-        }
-      }
-    },
     hooks: {
       onError: (error) => ElMessage.error(error.message)
     }
@@ -232,23 +194,8 @@
 
   const { tableData, isLoading, columns, columnChecks, refreshAll } = tableApi
 
-  // 列配置选项
-  const columnOptions = [
-    { label: '名称', prop: 'name' },
-    { label: '类型', prop: 'type' },
-    { label: '路由', prop: 'path' },
-    { label: '权限标识', prop: 'authCode' },
-    { label: '状态', prop: 'status' },
-    { label: '操作', prop: 'operation' }
-  ]
-
   // 刷新表格数据
-  const handleRefresh = () => {
-    refreshAll()
-  }
-
-  // 刷新菜单列表（兼容原有方法）
-  const refreshMenuList = async () => {
+  const handleRefresh = async () => {
     await refreshAll()
   }
 
@@ -274,19 +221,13 @@
         console.error(res.message)
         ElMessage.error('删除失败: ' + res.message)
       }
-      await refreshMenuList()
+      await refreshAll()
     } catch (error) {
       if (error !== 'cancel') {
         ElMessage.error('删除失败')
       }
     }
   }
-
-  // 兼容原有的 dialogVisible 等变量（如果弹窗组件需要）
-  const dialogVisible = ref(false)
-  const authFormVisible = ref(false)
-  const dialogTitle = computed(() => '菜单详情')
-  const isEditingAuth = ref(false)
 
   onMounted(async () => {
     // useTable 会自动加载数据，这里不需要手动调用
