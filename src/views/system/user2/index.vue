@@ -11,11 +11,7 @@
 
       <ElCard shadow="never" class="art-table-card">
         <!-- 表格头部 -->
-        <ArtTableHeader
-          :columnList="columnOptions"
-          v-model:columns="columnChecks"
-          @refresh="handleRefresh"
-        >
+        <ArtTableHeader v-model:columns="columnChecks" @refresh="handleRefresh">
           <template #left>
             <ElButton @click="showDialog('add')" v-permission="'System:User:Create'"
               >添加用户</ElButton
@@ -29,7 +25,7 @@
           :columns="columns"
           :pagination="paginationState"
           :loading="isLoading"
-          :table-config="{ rowKey: 'User.id' }"
+          :table-config="{ rowKey: 'id' }"
           :layout="{ marginTop: 10 }"
           @pagination:size-change="onPageSizeChange"
           @pagination:current-change="onCurrentPageChange"
@@ -64,17 +60,6 @@
 
         <ElRow :gutter="20">
           <ElCol :span="12">
-            <ElFormItem label="密码" prop="password">
-              <ElInput
-                v-model="formData.password"
-                type="password"
-                :disabled="dialogType === 'edit'"
-                show-password
-                placeholder="请输入密码"
-              />
-            </ElFormItem>
-          </ElCol>
-          <ElCol :span="12">
             <ElFormItem label="手机号" prop="phone">
               <ElInput v-model="formData.phone" placeholder="请输入手机号" />
             </ElFormItem>
@@ -82,6 +67,16 @@
           <ElCol :span="12">
             <ElFormItem label="邮箱" prop="email">
               <ElInput v-model="formData.email" placeholder="请输入邮箱" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="12">
+            <ElFormItem label="密码" prop="password" v-if="dialogType === 'add'">
+              <ElInput
+                v-model="formData.password"
+                type="password"
+                show-password
+                placeholder="请输入密码"
+              />
             </ElFormItem>
           </ElCol>
         </ElRow>
@@ -167,8 +162,8 @@
 
       <template #footer>
         <div class="dialog-footer">
-          <ElButton @click="passwordDialogVisible = false">取 消</ElButton>
-          <ElButton type="primary" @click="handlePasswordSubmit">确 定</ElButton>
+          <ElButton @click="passwordDialogVisible = false">取消</ElButton>
+          <ElButton type="primary" @click="handlePasswordSubmit">确定</ElButton>
         </div>
       </template>
     </ElDialog>
@@ -378,17 +373,6 @@
     }
   ]
 
-  // 列配置选项
-  const columnOptions = [
-    { label: '用户名', prop: 'User.nickName' },
-    { label: '账号', prop: 'User.username' },
-    { label: '手机号', prop: 'User.phone' },
-    { label: '邮箱', prop: 'User.email' },
-    { label: '角色', prop: 'role_name' },
-    { label: '状态', prop: 'User.status' },
-    { label: '操作', prop: 'operation' }
-  ]
-
   // 表单实例引用
   const formRef = ref<FormInstance>()
 
@@ -396,8 +380,6 @@
   const handleRefresh = () => {
     refreshAll()
   }
-
-  // 用户列表数据已由 useTable 管理
 
   // 加载角色列表数据
   const loadRoleList = async () => {
@@ -413,8 +395,6 @@
       ElMessage.error('获取角色列表失败')
     }
   }
-
-  // 分页、搜索、重置逻辑已由 useTable 管理
 
   // 显示对话框
   const showDialog = (type: string, row?: any) => {
