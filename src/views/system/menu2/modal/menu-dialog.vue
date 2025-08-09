@@ -74,7 +74,7 @@
     <template #footer>
       <span class="dialog-footer">
         <ElButton @click="dialogVisible = false">取消</ElButton>
-        <ElButton type="primary" @click="submitForm()"> 确定 </ElButton>
+        <ElButton type="primary" @click="submitForm()">确定</ElButton>
       </span>
     </template>
   </ElDialog>
@@ -86,9 +86,6 @@
       <p>有实际页面的菜单, 确保精确到 .vue 文件, 例如: /index/index</p>
       <p>一级节点,确保路由地址前缀带 / , 例如 /dashboard</p>
       <p>菜单标识不要重复</p>
-      <p
-        >如果是单独的跳转页面, 不希望在菜单中展示, 请放置到 隐藏页面 子菜单中, 然后勾选 菜单隐藏
-        属性</p
       >
     </div>
   </ElDialog>
@@ -143,7 +140,7 @@
         message: '请输入路由地址',
         trigger: 'blur',
         validator: (rule, value, callback) => {
-          if ((form.type === 'catalog' || form.type === 'menu') && !value) {
+          if (form.type === 'menu' && !value) {
             callback(new Error('请输入路由地址'))
           } else {
             callback()
@@ -157,7 +154,7 @@
         message: '请输入组件路径',
         trigger: 'blur',
         validator: (rule, value, callback) => {
-          if (form.type === 'menu' && !value) {
+          if ((form.type === 'catalog' || form.type === 'menu') && !value) {
             callback(new Error('请输入组件路径'))
           } else {
             callback()
@@ -227,7 +224,7 @@
 
   const submitForm = async () => {
     if (!formRef.value) return
-    // // 根据当前类型决定需要验证的字段
+    // 根据当前类型决定需要验证的字段
     const fieldsToValidate = ['name', 'title', 'path']
     if (form.type === 'menu') {
       fieldsToValidate.push('component')
@@ -257,7 +254,7 @@
         let res
         if (isEdit.value) {
           res = await updateMenu({
-            id: id,
+            id: `${id}`,
             data: dataWithoutId
           })
         } else {
