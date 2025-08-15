@@ -12,7 +12,7 @@
       <!-- 表格头部 -->
       <ArtTableHeader v-model:columns="columnChecks" @refresh="refresh">
         <template #left>
-          <ElButton @click="showDialog('add')" v-permission="'System:Menu:Create'"
+          <ElButton @click="showDialog('add')" v-permission="'System:Role:Create'"
             >添加角色</ElButton
           >
         </template>
